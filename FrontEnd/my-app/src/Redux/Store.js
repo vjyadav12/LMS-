@@ -5,7 +5,8 @@ import CoursesSlice from './Slices/CoursesSlice'
 const Store = configureStore({
     reducer:{
         auth: AuthSlice,
+        courses: CoursesSlice
        
-})
+}})
 
 export default Store
