@@ -6,20 +6,21 @@ const initialState = {
   courseData: [],
 };
 
-const getAllCourses = createAsyncThunk("/course", async () => {
+export const getAllCourses = createAsyncThunk("courses/getAllCourses", async () => {
   try {
-    const Result = axios.get("http://localhost:5555/course");
+    const response = await axios.get("http://localhost:5555/course");
+    console.log(response.data.Courses);
 
-    toast.promise(Result, {
-      loading: "Wait fetching your data",
-      success: "Successfully fetched the data",
-      error: "Failed to fetch the course",
-    });
+    toast.promise(response,{
+      loading:"wait Fetching Your Courses",
+      success:"successfully fetched the data",
+      error:"fail to fetch your course"
+    })
 
-    return Result?.data?.Courses;
+    return response.data.Courses; // Return without extra await
   } catch (error) {
-    toast.error(error?.response?.data?.message);
-    throw error; // Ensure the error is propagated to handle rejection
+    toast.error(error?.response?.data?.message || "Failed to fetch courses");
+    throw error; // Re-throw to ensure promise rejection
   }
 });
 
@@ -28,11 +29,12 @@ const CoursesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getAllCourses.fulfilled, (state, action) => {
-      if (action?.payload) {
-        state.courseData = [...action.payload];
+    builder
+     .addCase(getAllCourses.fulfilled,(state, action)=>{
+      if(action?.payload){
+        state.courseData = action?.payload
       }
-    });
+     })
   },
 });
 

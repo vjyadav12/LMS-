@@ -1,19 +1,31 @@
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllCourses } from '../Redux/Slices/CoursesSlice';
 
 const CoursePage = () => {
-    const CourseDataa = useSelector((state) => state.courses.courseData);
+    const { courseData } = useSelector((state) => state.courses);
+    const dispatch = useDispatch();
+
+    const loadCourses = async() => {
+        await dispatch(getAllCourses());
+        console.log(courseData); 
+    };
+
+    useEffect(() => {
+        loadCourses();
+    }, []);
 
     return (
         <div className="flex h-[80vh] justify-center items-center p-4">
             <div className="flex flex-col justify-center items-center">
-                {CourseDataa?.[0] ? (
-                    <>
-                        <img src={CourseDataa[0].thumbnail?.secure_url} alt="image" />
-                        <h1>{CourseDataa[0].title}</h1>
-                        <h1>{CourseDataa[0].description}</h1>
-                    </>
+                {courseData && courseData.length > 0 ? (
+                    courseData.map((course) => (
+                        <div key={course.id}>
+                            <h1>{course.title}</h1>
+                        </div>
+                    ))
                 ) : (
-                    <h1>Loading...</h1>
+                    <p>Loading courses...</p>
                 )}
             </div>
         </div>
