@@ -9,6 +9,7 @@ import LoginPage from "./Pages/LoginPage";
 import SignUpPage from "./Pages/SignUpPage";
 import ReviewPage from "./Pages/ReviewPage";
 import NotFoundPage from "./Pages/PageNotFound";
+import CoursePage from "./Pages/CoursePage";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
 
         <Route path="/review" element={<ReviewPage/>}/>
         <Route path="/*" element={<NotFoundPage/>}/>
+        <Route path="/courses" element={<CoursePage/>}/>
 
 
       </Routes>

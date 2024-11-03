@@ -8,17 +8,18 @@ const initialState = {
 
 const getAllCourses = createAsyncThunk("/course", async () => {
   try {
-    const Result = await axios.get("http://localhost:5555/course");
+    const Result = axios.get("http://localhost:5555/course");
 
-    toast.promise(Result,{
-        loading:"Wait fetching your data ",
-        success:"SuccessFully Fetch the data ",
-        error:"Fail to fetch the Course "
-    })
+    toast.promise(Result, {
+      loading: "Wait fetching your data",
+      success: "Successfully fetched the data",
+      error: "Failed to fetch the course",
+    });
 
-    return await Result?.data?.Courses 
+    return Result?.data?.Courses;
   } catch (error) {
     toast.error(error?.response?.data?.message);
+    throw error; // Ensure the error is propagated to handle rejection
   }
 });
 
@@ -27,10 +28,11 @@ const CoursesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getAllCourses.fulfilled, (state, action) => {});
-    if(action?.payload){
-        state.courseData =[...action?.payload]
-    }
+    builder.addCase(getAllCourses.fulfilled, (state, action) => {
+      if (action?.payload) {
+        state.courseData = [...action.payload];
+      }
+    });
   },
 });
 
